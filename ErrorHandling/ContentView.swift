@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let connectionOK = true
+    let connectionSpeed = 30.0
+    let fileFound = false
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -17,6 +22,21 @@ struct ContentView: View {
         }
         .padding()
     }
+    
+    func transferFile() throws {
+        guard connectionOK else {
+            throw FileTransferError.noConnection
+        }
+        guard connectionSpeed>30 else {
+            throw FileTransferError.lowBandWidth
+        }
+        guard fileFound else {
+            throw FileTransferError.fileNotFound
+        }
+        
+    }
+    
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
