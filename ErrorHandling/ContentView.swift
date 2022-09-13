@@ -9,18 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var readText = ""
+    
     let connectionOK = true
     let connectionSpeed = 30.0
     let fileFound = false
     
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Button("click here") {
+                self.readText = sendFile()
+            }
+            Text(readText)
         }
-        .padding()
+       
     }
     
     func transferFile() throws {
@@ -36,7 +38,28 @@ struct ContentView: View {
         
     }
     
-    
+    func sendFile() -> String {
+        
+//        defer {
+//            removeTmpFiles()
+//            closeConnection()
+//        }
+        
+        do {
+            try transferFile()
+        }catch FileTransferError.noConnection {
+            return "No Network connection"
+        }catch FileTransferError.lowBandWidth {
+            return "File Transfer Speed to low"
+        }catch FileTransferError.fileNotFound {
+            return "File Not Found"
+        }
+        catch {
+            return "Unknown Error"
+        }
+        
+        return "Successfully transfer"
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
